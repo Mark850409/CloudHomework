@@ -1,9 +1,15 @@
 # 雲端運算 作業操作步驟
 
+## 簡介
+
+透過負載平衡的方式建立虛擬機，並建立映像檔，爾後以此映像檔快速建至環境
+
 ## 目錄
 
 - [雲端運算 作業操作步驟](#雲端運算-作業操作步驟)
+  - [簡介](#簡介)
   - [目錄](#目錄)
+  - [2023/11/13 nginx無法執行錯誤解決方案](#20231113-nginx無法執行錯誤解決方案)
   - [作業1：建立 Azure 虛擬機器1](#作業1建立-azure-虛擬機器1)
     - [STEP1：建立資源群組](#step1建立資源群組)
     - [STEP2：輸入以下內容](#step2輸入以下內容)
@@ -30,6 +36,49 @@
     - [STEP6：選擇原先建立好的負載平衡設定](#step6選擇原先建立好的負載平衡設定)
     - [STEP7：建立標籤，如紅框處設定](#step7建立標籤如紅框處設定-1)
     - [STEP8：完成畫面如下](#step8完成畫面如下-1)
+
+## 2023/11/13 nginx無法執行錯誤解決方案
+
+> Q1：有同學建立第三台虛擬機發生以下錯誤，如下圖，可參考以下步驟解決
+
+![無法連線](https://raw.githubusercontent.com/Mark850409/UploadGithubImage/master/無法連線.png)
+
+
+STEP1：在建立映像時，"自動在建立映像後刪除此虛擬機器"選項最好打勾，不然在啟動時有可能會有問題
+![image-20231113140020832](https://raw.githubusercontent.com/Mark850409/UploadGithubImage/master/image-20231113140020832.png)
+
+
+STEP2：進入lb後端集區，查看兩台VM是否都被加入後端集區，如果沒有請手動加入
+![image-20231113135215068](https://raw.githubusercontent.com/Mark850409/UploadGithubImage/master/image-20231113135215068.png)
+
+
+STEP3：請檢查下方操作步驟是否還有其他遺漏的部份
+
+---
+
+> Q2：原本設定的NAT規則明明沒更改，但是在建立第二台虛擬機後卻無法連線了
+
+
+![image-20231113135359803](https://raw.githubusercontent.com/Mark850409/UploadGithubImage/master/image-20231113135359803.png)
+
+
+STEP1：進入NAT輸入規則，將目標更改為VM2，網路IP位址也請除新選擇
+![image-20231113135055046](https://raw.githubusercontent.com/Mark850409/UploadGithubImage/master/image-20231113135055046.png)
+
+
+STEP2：更改完後，請輸入以下指令進行測試
+
+```
+ssh [你的公用IP] -l [你設定的帳號] -p [你設定的port]
+```
+![image-20231113135523787](https://raw.githubusercontent.com/Mark850409/UploadGithubImage/master/image-20231113135523787.png)
+
+
+STEP3：登入成功後，可以用以下指令驗證nginx伺服器狀態
+```
+systemctl status nginx
+```
+![image-20231113135643440](https://raw.githubusercontent.com/Mark850409/UploadGithubImage/master/image-20231113135643440.png)
 
 
 
